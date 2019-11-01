@@ -49,3 +49,10 @@ struct Dinic{
         } return re;
     }
 };
+
+signed main(){
+    int n = 100; 
+    int N = n+5; int s = N-1, t = N-2;
+    Dinic dd (N,s,t);
+    int mf = dd.mf();
+}
