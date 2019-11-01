@@ -4,12 +4,13 @@ typedef long long ll;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef pair<int, ll> pil;
-typedef pair<int, ll> pli;
+typedef pair<ll, int> pli;
 typedef pair<double,double> pdd;
 #define SQ(i) ((i)*(i))
 #define MEM(a, b) memset(a, (b), sizeof(a))
 #define SZ(i) int(i.size())
 #define FOR(i, j, k, in) for (int i=j ; i<k ; i+=in)
+#define FOR(i, a, b) for (int i = (a); i<(b); i++)
 #define RFOR(i, j, k, in) for (int i=j ; i>=k ; i-=in)
 #define REP(i, j) FOR(i, 0, j, 1)
 #define REP1(i,j) FOR(i, 1, j+1, 1)
@@ -22,6 +23,9 @@ typedef pair<double,double> pdd;
 #define Y second
 #define f first
 #define s second
+#define MN(a,b) a = min(a,(__typeof__(a))(b))
+#define MX(a,b) a = max(a,(__typeof__(a))(b))
+#define SORT_UNIQUE(c) (sort(c.begin(),c.end()), c.resize(distance(c.begin(),unique(c.begin(),c.end()))))
 #ifdef BTC
 #define TIME(i) Timer i(#i)
 #define debug(...) do{\
@@ -73,7 +77,9 @@ public:
 const ll MOD = 1000000007;
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 const int iNF = 0x3f3f3f3f;
-// const ll MAXN = 
+// const int MAXN = 
+
+void GG(){cout<<"-1\n"; exit(0);}
 
 /********** Good Luck :) **********/
 int main () {
