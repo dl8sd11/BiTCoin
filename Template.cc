@@ -10,7 +10,7 @@ typedef pair<double,double> pdd;
 #define MEM(a, b) memset(a, (b), sizeof(a))
 #define SZ(i) int(i.size())
 #define FOR(i, j, k, in) for (int i=j ; i<k ; i+=in)
-#define FOR(i, a, b) for (int i = (a); i<(b); i++)
+#define FOR3(i, a, b) for (int i = (a); i<(b); i++)
 #define RFOR(i, j, k, in) for (int i=j ; i>=k ; i-=in)
 #define REP(i, j) FOR(i, 0, j, 1)
 #define REP1(i,j) FOR(i, 1, j+1, 1)
