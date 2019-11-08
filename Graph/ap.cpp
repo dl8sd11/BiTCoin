@@ -7,12 +7,12 @@ using namespace std;
 const int MAXN = 100005;
 
 std::vector<int> G[MAXN];// 1-base
-std::vector<int> bcc[MAXN];//存每塊雙連通分量的點
+std::vector<int> bcc[MAXN];
 int low[MAXN],vis[MAXN],Time;
 int bcc_id[MAXN],bcc_cnt;// 1-base
-bool is_cut[MAXN];//是否為割點，割點的bcc_id沒意義
+bool is_cut[MAXN];//bcc_id is ndef if is_cut
 int st[MAXN],top;
-void dfs(int u,int pa=-1){//u當前點，pa父親 
+void dfs(int u,int pa=-1){
 	int v,child=0;
 	low[u]=vis[u]=++Time;
 	st[top++]=u;
@@ -31,10 +31,10 @@ void dfs(int u,int pa=-1){//u當前點，pa父親
 				bcc_id[u]=bcc_cnt;
 				bcc[bcc_cnt].push_back(u);
 			}
-		}else if(vis[v]<vis[u]&&v!=pa)//反向邊 
+		}else if(vis[v]<vis[u]&&v!=pa)//reverse 
 			low[u]=std::min(low[u],vis[v]);
 	}
-	if(pa==-1&&child<2)is_cut[u]=0;//u是dfs樹的根要特判
+	if(pa==-1&&child<2)is_cut[u]=0;//u for root
 }
 inline void bcc_init(int n){
 	Time=bcc_cnt=top=0;

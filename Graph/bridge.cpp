@@ -14,21 +14,21 @@ std::vector<edge> E;
 std::vector<int> G[MAXN];// 1-base
 int low[MAXN],vis[MAXN],Time;
 int bcc_id[MAXN],bridge_cnt,bcc_cnt;// 1-base
-int st[MAXN],top;//BCC用 
+int st[MAXN],top;// for bcc 
 inline void add_edge(int u,int v){
 	G[u].push_back(E.size());
 	E.push_back(edge(u,v));
 	G[v].push_back(E.size());
 	E.push_back(edge(v,u));
 }
-void dfs(int u,int re=-1){//u當前點，re為u連接前一個點的邊 
+void dfs(int u,int re=-1){// re is last edge
 	int v;
 	low[u]=vis[u]=++Time;
 	st[top++]=u;
 	for(size_t i=0;i<G[u].size();++i){
 		int e=G[u][i];v=E[e].v;
 		if(!vis[v]){
-			dfs(v,e^1);//e^1反向邊 
+			dfs(v,e^1);//e^1 reverse
 			low[u]=std::min(low[u],low[v]);
 			if(vis[u]<low[v]){
 				E[e].is_bridge=E[e^1].is_bridge=1;
@@ -37,9 +37,9 @@ void dfs(int u,int re=-1){//u當前點，re為u連接前一個點的邊
 		}else if(vis[v]<vis[u]&&e!=re)
 			low[u]=std::min(low[u],vis[v]);
 	}
-	if(vis[u]==low[u]){//處理BCC
+	if(vis[u]==low[u]){// build bcc
 		++bcc_cnt;// 1-base
-		do bcc_id[v=st[--top]]=bcc_cnt;//每個點所在的BCC
+		do bcc_id[v=st[--top]]=bcc_cnt;
 		while(v!=u);
 	}
 }
