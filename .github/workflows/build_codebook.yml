@@ -15,6 +15,7 @@ jobs:
         uses: xu-cheng/latex-action@master
         with:
           root_file: codebook.tex
+          arg: "-xelatex -file-line-error -interaction=nonstopmode"
       - name: Make Public Folder
         run: |
           mkdir public
