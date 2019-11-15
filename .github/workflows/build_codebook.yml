@@ -6,6 +6,11 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v1
+      - name: Prepare Source
+        run: |
+          rm -f list codes.tex
+          du --max-depth=2 -a | grep "cpp" > list
+          python3 gen_codes.py > codes.tex
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@master
         with:
