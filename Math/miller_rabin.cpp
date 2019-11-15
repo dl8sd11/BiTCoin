@@ -16,8 +16,8 @@ ll mpow(ll a,ll b,ll mod){//a^b%mod
         if(b&1)ans=mul1(ans,a,mod);
     return ans;
 }
-int sprp[3]={2,7,61};//int範圍可解
-int llsprp[7]={2,325,9375,28178,450775,9780504,1795265022};//至少unsigned long long範圍
+int sprp[3]={2,7,61};//int
+int llsprp[7]={2,325,9375,28178,450775,9780504,1795265022};//unsinged long long 
 
 bool isprime(ll n){
     if(n==2)return 1;
