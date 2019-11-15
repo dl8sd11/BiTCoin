@@ -4,6 +4,7 @@
 \usepackage[left=1cm, right=1cm, top=1cm, bottom=2cm]{geometry}
 
 \usepackage{listings}
+\usepackage{CJKutf8}
 \usepackage{xcolor}
  
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -31,8 +32,10 @@
 \lstset{style=mystyle}
  
 \begin{document}
-The next code will be directly imported from a file
- 
+\begin{CJK*}{UTF8}{bsmi}
+\tableofcontents
+
 \input{codes.tex}
 
+\end{CJK*}
 \end{document}
