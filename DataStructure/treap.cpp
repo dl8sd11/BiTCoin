@@ -1,111 +1,66 @@
-#include <bits/stdc++.h>
-using namespace std;
-typedef long long ll;
-
-const ll ra = 880301,rb = 53, rm = 20020607;
-ll rn = 97;
-int random () {
-    return rn = (rn*ra+rb) % rm;
-}
-
-
-struct Node {
-    Node *l,*r;
-    ll key,val,tag;
-    int sz,pri;
-    Node (ll k,ll v) {
-        l = r = 0;
-        pri = random();
-        key = k;
-        tag = val = v;
-        sz = 1;
-    }
-
-    void pull() {
-        sz = 1;
-        tag = val;
-        if (l) {
-            tag = max(tag,l->tag);
-            sz += l->sz;
-        }
-        if (r) {
-            tag = max(tag,r->tag);
-            sz += r->sz;
-        }
+struct Nd{
+    int pri = rand();
+    int val = 0, tag = 0, id = 0, idtg = 0, mx=0;
+    Nd * lc=0, *rc = 0;
+    Nd(int v, int pos) {
+        val = mx=v; id = pos;
     }
 };
-Node *root;
 
-int SIZ(Node *nd) {
-    return nd ? nd->sz : 0;
-}
-
-Node *mrg(Node *a,Node *b) {
-    if (!a || !b) {
-        return a ? a : b;
+inline void push(Nd *& o) {
+    if (!o) return;
+    if (o->tag) {
+        o->val += o->tag;
+        o->mx += o->tag;
+        if (o->lc) o->lc->tag += o->tag;
+        if (o->rc) o->rc->tag += o->tag;
+        o->tag=0;
     }
-    if (a->pri > b->pri) {
-        a->r = mrg(a->r,b);
-        a->pull();
-        return a;
-    } else {
-        b->l = mrg(a,b->l);
-        b->pull();
-        return b; 
+    if (o->idtg) {
+        o->id += o->idtg;
+        if (o->lc) o->lc->idtg += o->idtg;
+        if (o->rc) o->rc->idtg += o->idtg;
+        o->idtg = 0;
     }
 }
 
-// max a key <= key
-void split_key(Node *o,Node *&a,Node *&b,ll key) {
-    if (!o) {
-        a = b = 0;
-        return;
-    }
-    if (o->key <= key) {
-        a = o;
-        split_key(o->r,a->r,b,key);
-        a->pull();
-    } else {
-        b = o;
-        split_key(o->l,a,b->l,key);
-        b->pull();
+inline void pull(Nd *&o) {
+    if (!o)return;
+    o->mx = o->val;
+    if (o->lc) o->mx = max(o->mx, o->lc->mx);
+    if (o->rc) o->mx = max(o->mx, o->rc->mx);
+}
+
+Nd * merge(Nd *&A, Nd*&B) {
+    push(A); push(B);
+    if (!A) return B;
+    if (!B) return A;
+    if (A->pri > B->pri) {
+        A->rc = merge(A->rc, B);
+        push(A->lc);
+        pull(A);
+        return A;
+    }else{
+        B->lc = merge(A, B->lc);
+        push(B->rc);
+        pull(B);
+        return B;
     }
 }
 
-// size of a equals sz
-void split_sz(Node *o,Node *&a,Node *&b,ll sz) {
-    if (!o) {
-        a = b = 0;
-        return;
+void split(Nd *o, Nd * & A, Nd *& B, int id) {
+    A=B=0;
+    if (!o) return;
+    push(o);
+    if (o -> id < id) {
+        A = o;
+        split(o->rc, A->rc, B, id);
+        push(A->lc);
+        pull(A);
+    }else{
+        B = o;
+        split(o->lc,A, B->lc, id);
+        push(B->rc);
+        pull(B);
     }
-    if (SIZ(o->l)+1 <= sz) {
-        a = o;
-        split_sz(o->r,a->r,b,sz-SIZ(o->l)-1);
-        a->pull();
-    } else {
-        b = o;
-        split_sz(o->l,a,b->l,sz);
-        b->pull();
-    }
-}
-
-void ins(ll key,ll val) {
-    Node *nw = new Node(key,val);
-    if (!root) {
-        root = nw;
-    } else {
-        Node *l,*r;
-        split_key(root,l,r,key);
-        root = mrg(l,mrg(nw,r));
-    }
-}
-
-// static rmq on treap lol
-ll query(ll l,ll r) {
-    Node *a,*b,*c;
-    split_sz(root,a,b,l-1);
-    split_sz(b,b,c,r-l+1);
-    ll ret = b->tag;
-    root = mrg(a,mrg(b,c));
-    return ret;
 }
