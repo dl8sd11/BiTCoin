@@ -1,55 +1,19 @@
-#include <bits/stdc++.h>
-using namespace std;
+int n;  // array size
+int seg[2 * maxn];
 
-const int MAXN = 100005;
-
-int n, zkw[MAXN*2];
-
-/*
-    query: range max
-    add: single change value
-*/
-void build () {
-    for (int i=n-1; i>0; i--) {
-        zkw[i] = max(zkw[i<<1], zkw[i<<1|1]);
-    }
+void build() {  // build the tree
+  for (int i = maxn - 1; i > 0; --i) seg[i] = max(seg[i<<1] , seg[i<<1|1]);
 }
 
-void chg (int x, int val) {
-    for (zkw[x+=n]=val; x>1; x>>=1) {
-        zkw[x>>1] = max(zkw[x], zkw[x^1]);
-    }
+void modify(int p, int value) {  // set value at position p
+    for (seg[p += maxn] = value; p > 1; p >>= 1) seg[p>>1] = max(seg[p] , seg[p^1]);
 }
 
-int qry (int l, int r) {
-    int ret = -0x3f3f3f3f;
-    for (l+=n,r+=n; l<r; l>>=1, r>>=1) {
-        if (l&1) {
-            ret = max(ret, zkw[l++]);
-        }
-        if (r&1) {
-            ret = max(ret, zkw[--r]);
-        }
+int query(int l, int r) {  // sum on interval [l, r)
+    int res = 0;
+    for (l += maxn, r += maxn; l < r; l >>= 1, r >>= 1) {
+        if (l&1) res = max(res, seg[l++]);
+        if (r&1) res = max(res, seg[--r]);
     }
-    return ret;
-}
-
-int main () {
-    cin >> n;
-    for (int i=0; i<n; i++) {
-        cin >> zkw[i+n];
-    }
-
-    build();
-    int cmd;
-    while (cin >> cmd) {
-        int l, r, x, v;
-        if (cmd == 1) {
-            cin >> l >> r;
-            cout << qry(l, r) << endl;
-        } else {
-            cin >> x >> v;
-            chg(x, v);
-        }
-    }
+    return res;
 }
